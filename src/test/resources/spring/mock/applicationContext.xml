@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <jdbc:embedded-database id="dataSource" generate-name="false" type="H2">
+        <jdbc:script encoding="UTF-8" location="classpath:db-initial/work_id_store.sql" execution="INIT"/>
+    </jdbc:embedded-database>
+
+    <!--通过depends-on确保MysqlDatabaseWorkIdStore中被@PostConstruct注解的方法在调用时，内存数据库已经得到初始化-->
+    <bean id="mysqlDatabaseWorkIdStore" class="yummy.util.support.MysqlDatabaseWorkIdStore" depends-on="dataSource"/>
+</beans>
